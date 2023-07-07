@@ -4,6 +4,8 @@ from item import Item
 
 
 class ItemRepository:
+    __slots__ = ["__items"]
+    
     class ItemNotFoundException(Exception):
         pass
 
