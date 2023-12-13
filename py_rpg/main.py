@@ -2,7 +2,7 @@ import time
 
 from pathlib import Path
 
-from item import Item
+from character import Character
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
 
@@ -10,10 +10,11 @@ import pyray
 
 
 class Game:
-    __slots__ = ["__item_repository", "__name", "__time", "__delta_time"]
+    __slots__ = ["__characters", "__item_repository", "__name", "__time", "__delta_time"]
 
     def __init__(self, name: str):
         self.__name = name
+        self.__characters: list[Character] = [Character("Mike", pyray.Vector2(384, 160)), Character("John", pyray.Vector2(32, 64))]
         self.__item_repository = ItemRepository()
         self.__load_items()
         # TODO: Create a separate time module to avoid a monolithic Game class
@@ -38,9 +39,18 @@ class Game:
     def __update(self) -> None:
         self.__update_time()
 
+    def __render_characters(self) -> None:
+        for chr in self.__characters:
+            font_size = 18
+            pos_x = int(chr.pos_x)
+            pos_y = int(chr.pos_y)
+            pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
+            pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
+
     def __render(self) -> None:
         pyray.begin_drawing()
         pyray.clear_background(pyray.WHITE)
+        self.__render_characters()
         # TODO: Move these debug texts to their own method
         pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
         pyray.draw_text(f"delta_time: {self.__delta_time:.4f}", 100, 145, 24, pyray.BLACK)
