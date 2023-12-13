@@ -47,15 +47,17 @@ class Game:
             pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
             pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
 
-    def __render(self) -> None:
-        pyray.begin_drawing()
-        pyray.clear_background(pyray.WHITE)
-        self.__render_characters()
-        # TODO: Move these debug texts to their own method
+    def __render_debug_information(self) -> None:
         pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
         pyray.draw_text(f"delta_time: {self.__delta_time:.4f}", 100, 145, 24, pyray.BLACK)
         pyray.draw_text(self.__item_repository[0].name, 100, 190, 24, pyray.BLACK)
         pyray.draw_text(self.__item_repository[1].name, 100, 235, 24, pyray.BLACK)
+
+    def __render(self) -> None:
+        pyray.begin_drawing()
+        pyray.clear_background(pyray.WHITE)
+        self.__render_characters()
+        self.__render_debug_information()
         pyray.end_drawing()
 
     def run(self) -> None:
