@@ -1,0 +1,10 @@
+[
+    {
+        "name": "Potion",
+        "description": "Heals 25HP"
+    },
+    {
+        "name": "Ancient Writings",
+        "description": "Tomes of ancient writings. You have no idea what they say, but someone will surely be interested in buying them for a good price!"
+    }
+]
