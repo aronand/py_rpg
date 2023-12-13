@@ -3,7 +3,6 @@ from functools import singledispatchmethod
 from item import Item
 
 
-# TODO: Support iterating through an ItemRepository
 class ItemRepository:
     __slots__ = ["__items"]
     

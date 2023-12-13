@@ -44,3 +44,15 @@ class TestItemRepository(TestCase):
         with self.subTest("Test name based removal."):
             self.assertRaises(ItemRepository.ItemNotFoundException,
                               self.item_repository.remove_item, "Item")
+
+    def test_iterator(self) -> None:
+        items = 5
+        for i in range(items):
+            item = Item(f"Item_{i}", "")
+            self.item_repository.add_item(item)
+
+        item_count = 0
+        for item in self.item_repository:
+            item_count += 1
+        
+        self.assertEqual(items, item_count)
