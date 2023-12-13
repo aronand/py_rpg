@@ -36,5 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with unittest
       run: |
-        cd py_rpg
-        python -m unittest discover
+        coverage run --source=. -m unittest discover py_rpg
+    - name: Get unit test coverage
+      run: |
+        coverage report -m
