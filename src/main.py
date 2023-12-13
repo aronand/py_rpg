@@ -24,14 +24,20 @@ class Game:
         self.__delta_time = time.time() - self.__time
         self.__time = time.time()
 
+    def __update(self) -> None:
+        self.__update_time()
+
+    def __render(self) -> None:
+        pyray.begin_drawing()
+        pyray.clear_background(pyray.WHITE)
+        pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
+        pyray.draw_text(f"delta_time: {self.__delta_time:.4f}", 100, 145, 24, pyray.BLACK)
+        pyray.end_drawing()
+
     def run(self) -> None:
         while not pyray.window_should_close():
-            self.__update_time()
-            pyray.begin_drawing()
-            pyray.clear_background(pyray.WHITE)
-            pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
-            pyray.draw_text(f"delta_time: {self.__delta_time:.4f}", 100, 145, 24, pyray.BLACK)
-            pyray.end_drawing()
+            self.__update()
+            self.__render()
         pyray.close_window()
 
 
