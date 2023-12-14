@@ -22,7 +22,23 @@ class Character:
 
     @property
     def is_moving(self) -> bool:
-        return self.__position != self.__next_position
+        """
+        Determines if a character is moving.
+        
+        Based on whether the character's position is roughly equal to the next position.
+        """
+        # For whatever reason comparing the vectors doesn't work, will have to investigate further
+        return int(self.pos_x) != int(self.__next_position.x) or int(self.pos_y) != int(self.__next_position.y)
 
     def move_to(self, position: pyray.Vector2) -> None:
+        """
+        Sets the position where the character should move towards.
+        """
         self.__next_position = position
+
+    def update_position(self, delta_time: float) -> None:
+        """
+        Moves the character towards its next position.
+        """
+        speed = 32
+        self.__position = pyray.vector2_move_towards(self.__position, self.__next_position, speed * delta_time)
