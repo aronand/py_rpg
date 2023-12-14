@@ -2,6 +2,8 @@ import time
 
 from pathlib import Path
 
+import raywrap
+
 from character import Character
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
@@ -88,12 +90,11 @@ class Game:
         pyray.draw_text(self.__item_repository[1].name, 100, 235, 24, pyray.BLACK)
 
     def __render(self) -> None:
-        pyray.begin_drawing()
-        pyray.clear_background(pyray.WHITE)
-        self.__render_characters()
-        if self.debug_mode:
-            self.__render_debug_information()
-        pyray.end_drawing()
+        with raywrap.drawing():
+            pyray.clear_background(pyray.WHITE)
+            self.__render_characters()
+            if self.debug_mode:
+                self.__render_debug_information()
 
     def run(self) -> None:
         # TODO: Delete these after testing
