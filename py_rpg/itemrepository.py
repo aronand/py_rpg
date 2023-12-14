@@ -28,7 +28,7 @@ class ItemRepository:
         """
         self.__items.append(item)
 
-    def create_item(self, *args) -> None:
+    def create_item(self, *args: str) -> None:
         """
         Creates an Item object in the repository with the given args.
         
@@ -37,7 +37,7 @@ class ItemRepository:
         self.__items.append(Item(*args))
 
     @singledispatchmethod
-    def remove_item(self, arg) -> Item:
+    def remove_item(self, arg: int | str) -> Item:
         """
         Remove an item from the ItemRepository based on the type of arg.
         """

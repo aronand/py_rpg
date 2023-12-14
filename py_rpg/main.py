@@ -24,8 +24,8 @@ class Game:
         self.__item_repository = ItemRepository()
         self.__load_items()
         # TODO: Create a separate time module to avoid a monolithic Game class
-        self.__time = time.time()
-        self.__delta_time = self.__time
+        self.__time: float = time.time()
+        self.__delta_time: float = self.__time
         pyray.init_window(800, 600, self.__name)
 
     def __load_items(self) -> None:
