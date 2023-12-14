@@ -18,9 +18,9 @@ class Game:
         self.__name = name
         self.__debug_mode = debug_mode
         self.__characters: list[Character] = [
+            Character("Player"),
             Character("Mike", pyray.Vector2(384, 160)),
             Character("John", pyray.Vector2(32, 64)),
-            Character("Player"),
         ]
         self.__item_repository = ItemRepository()
         self.__load_items()
@@ -49,16 +49,16 @@ class Game:
 
     def __get_player_input(self) -> None:
         # TODO: For testing purposes this is fine, but long-term this is far from optimal
-        plr = self.__characters[2]
-        if not plr.is_moving:
+        player = self.__characters[0]
+        if not player.is_moving:
             if pyray.is_key_down(pyray.KEY_W):
-                plr.move_to(pyray.Vector2(plr.pos_x, plr.pos_y - 32))
+                player.move_to(pyray.Vector2(player.pos_x, player.pos_y - 32))
             if pyray.is_key_down(pyray.KEY_S):
-                plr.move_to(pyray.Vector2(plr.pos_x, plr.pos_y + 32))
+                player.move_to(pyray.Vector2(player.pos_x, player.pos_y + 32))
             if pyray.is_key_down(pyray.KEY_A):
-                plr.move_to(pyray.Vector2(plr.pos_x - 32, plr.pos_y))
+                player.move_to(pyray.Vector2(player.pos_x - 32, player.pos_y))
             if pyray.is_key_down(pyray.KEY_D):
-                plr.move_to(pyray.Vector2(plr.pos_x + 32, plr.pos_y))
+                player.move_to(pyray.Vector2(player.pos_x + 32, player.pos_y))
 
     def __update(self) -> None:
         self.__update_time()
