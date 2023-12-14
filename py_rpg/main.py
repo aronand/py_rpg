@@ -1,3 +1,4 @@
+import argparse
 import time
 
 from pathlib import Path
@@ -10,10 +11,11 @@ import pyray
 
 
 class Game:
-    __slots__ = ["__characters", "__item_repository", "__name", "__time", "__delta_time"]
+    __slots__ = ["__characters", "__debug_mode", "__item_repository", "__name", "__time", "__delta_time"]
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, debug_mode: bool):
         self.__name = name
+        self.__debug_mode = debug_mode
         self.__characters: list[Character] = [
             Character("Mike", pyray.Vector2(384, 160)),
             Character("John", pyray.Vector2(32, 64)),
@@ -35,6 +37,10 @@ class Game:
     @property
     def delta_time(self) -> float:
         return self.__delta_time
+
+    @property
+    def debug_mode(self) -> bool:
+        return self.__debug_mode
 
     def __update_time(self) -> None:
         self.__delta_time = time.time() - self.__time
@@ -69,8 +75,10 @@ class Game:
             next_x = int(chr.next_x)
             next_y = int(chr.next_y)
             pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
-            # Debug information
             pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
+            # Debug information
+            if not self.debug_mode:
+                continue
             pyray.draw_text(f"X: {pos_x}/{next_x}", pos_x, pos_y + font_size * 2, font_size, pyray.BLACK)
             pyray.draw_text(f"Y: {pos_y}/{next_y}", pos_x, pos_y + font_size * 3, font_size, pyray.BLACK)
 
@@ -84,7 +92,8 @@ class Game:
         pyray.begin_drawing()
         pyray.clear_background(pyray.WHITE)
         self.__render_characters()
-        self.__render_debug_information()
+        if self.debug_mode:
+            self.__render_debug_information()
         pyray.end_drawing()
 
     def run(self) -> None:
@@ -100,8 +109,11 @@ class Game:
 
 
 def main() -> None:
-    game = Game("py_rpg")
-    game.run()
+    program_name = "py_rpg"
+    parser = argparse.ArgumentParser(prog=program_name)
+    parser.add_argument("--debug", action="store_true")
+    args = parser.parse_args()
+    Game(program_name, args.debug).run()
 
 
 if __name__ == "__main__":
