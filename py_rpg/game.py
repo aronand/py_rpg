@@ -1,3 +1,4 @@
+import logging
 import time
 
 from pathlib import Path
@@ -36,6 +37,7 @@ class Game:
         loader = ItemLoader()
         for item in loader.json_to_item_generator(items_json):
             self.__item_repository.add_item(item)
+            logging.info(f"[ITEMS] {item.name} loaded")
 
     @property
     def delta_time(self) -> float:
