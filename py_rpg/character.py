@@ -49,5 +49,5 @@ class Character:
         """
         Moves the character towards its next position.
         """
-        speed = 32
+        speed = 64
         self.__position = pyray.vector2_move_towards(self.__position, self.__next_position, speed * delta_time)

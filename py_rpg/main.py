@@ -14,7 +14,11 @@ class Game:
 
     def __init__(self, name: str):
         self.__name = name
-        self.__characters: list[Character] = [Character("Mike", pyray.Vector2(384, 160)), Character("John", pyray.Vector2(32, 64))]
+        self.__characters: list[Character] = [
+            Character("Mike", pyray.Vector2(384, 160)),
+            Character("John", pyray.Vector2(32, 64)),
+            Character("Player"),
+        ]
         self.__item_repository = ItemRepository()
         self.__load_items()
         # TODO: Create a separate time module to avoid a monolithic Game class
@@ -36,10 +40,25 @@ class Game:
         self.__delta_time = time.time() - self.__time
         self.__time = time.time()
 
+    def __get_player_input(self) -> None:
+        # TODO: For testing purposes this is fine, but long-term this is far from optimal
+        plr = self.__characters[2]
+        if not plr.is_moving:
+            if pyray.is_key_down(pyray.KEY_W):
+                plr.move_to(pyray.Vector2(plr.pos_x, plr.pos_y - 32))
+            if pyray.is_key_down(pyray.KEY_S):
+                plr.move_to(pyray.Vector2(plr.pos_x, plr.pos_y + 32))
+            if pyray.is_key_down(pyray.KEY_A):
+                plr.move_to(pyray.Vector2(plr.pos_x - 32, plr.pos_y))
+            if pyray.is_key_down(pyray.KEY_D):
+                plr.move_to(pyray.Vector2(plr.pos_x + 32, plr.pos_y))
+
     def __update(self) -> None:
         self.__update_time()
-        chr = self.__characters[0]
-        if chr.is_moving:
+        self.__get_player_input()
+        for chr in self.__characters:
+            if not chr.is_moving:
+                continue
             chr.update_position(self.delta_time)
 
     def __render_characters(self) -> None:
@@ -50,6 +69,7 @@ class Game:
             next_x = int(chr.next_x)
             next_y = int(chr.next_y)
             pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
+            # Debug information
             pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
             pyray.draw_text(f"X: {pos_x}/{next_x}", pos_x, pos_y + font_size * 2, font_size, pyray.BLACK)
             pyray.draw_text(f"Y: {pos_y}/{next_y}", pos_x, pos_y + font_size * 3, font_size, pyray.BLACK)
