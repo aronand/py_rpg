@@ -7,16 +7,18 @@ import raywrap
 from character import Character
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
+from scene import Scene
 
 import pyray
 
 
 class Game:
-    __slots__ = ["__characters", "__debug_mode", "__item_repository", "__name", "__time", "__delta_time"]
+    __slots__ = ["__characters", "__debug_mode", "__item_repository", "__scenes", "__name", "__time", "__delta_time"]
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
         self.__debug_mode = debug_mode
+        pyray.init_window(800, 600, self.__name)
         self.__characters: list[Character] = [
             Character("Player"),
             Character("Mike", pyray.Vector2(384, 160)),
@@ -24,10 +26,10 @@ class Game:
         ]
         self.__item_repository = ItemRepository()
         self.__load_items()
+        self.__scenes: list[Scene] = [Scene("test_scene", Path(__file__).parent.joinpath("assets", "test_tileset.png"))]
         # TODO: Create a separate time module to avoid a monolithic Game class
         self.__time: float = time.time()
         self.__delta_time: float = self.__time
-        pyray.init_window(800, 600, self.__name)
 
     def __load_items(self) -> None:
         items_json: Path = Path(__file__).parent.joinpath("assets", "items.json")
