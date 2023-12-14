@@ -38,14 +38,21 @@ class Game:
 
     def __update(self) -> None:
         self.__update_time()
+        chr = self.__characters[0]
+        if chr.is_moving:
+            chr.update_position(self.delta_time)
 
     def __render_characters(self) -> None:
         for chr in self.__characters:
             font_size = 18
             pos_x = int(chr.pos_x)
             pos_y = int(chr.pos_y)
+            next_x = int(chr.next_x)
+            next_y = int(chr.next_y)
             pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
             pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
+            pyray.draw_text(f"X: {pos_x}/{next_x}", pos_x, pos_y + font_size * 2, font_size, pyray.BLACK)
+            pyray.draw_text(f"Y: {pos_y}/{next_y}", pos_x, pos_y + font_size * 3, font_size, pyray.BLACK)
 
     def __render_debug_information(self) -> None:
         pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
@@ -61,6 +68,11 @@ class Game:
         pyray.end_drawing()
 
     def run(self) -> None:
+        # TODO: Delete these after testing
+        chr = self.__characters[0]
+        new_position = pyray.Vector2(chr.pos_x + 128, chr.pos_y + 64)
+        chr.move_to(new_position)
+
         while not pyray.window_should_close():
             self.__update()
             self.__render()
