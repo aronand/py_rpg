@@ -25,19 +25,20 @@ class Game:
             Character("Mike", pyray.Vector2(384, 160)),
             Character("John", pyray.Vector2(32, 64)),
         ]
-        self.__item_repository = ItemRepository()
-        self.__load_items()
+        self.__item_repository = self.__load_items()
         self.__scenes: list[Scene] = [Scene("test_scene", Path(__file__).parent.joinpath("assets", "test_tileset.png"))]
         # TODO: Create a separate time module to avoid a monolithic Game class
         self.__time: float = time.time()
         self.__delta_time: float = self.__time
 
-    def __load_items(self) -> None:
-        items_json: Path = Path(__file__).parent.joinpath("assets", "items.json")
+    def __load_items(self) -> ItemRepository:
+        item_repo = ItemRepository()
         loader = ItemLoader()
+        items_json: Path = Path(__file__).parent.joinpath("assets", "items.json")
         for item in loader.json_to_item_generator(items_json):
-            self.__item_repository.add_item(item)
             logging.info(f"[ITEMS] {item.name} loaded")
+            item_repo.add_item(item)
+        return item_repo
 
     @property
     def delta_time(self) -> float:
