@@ -103,7 +103,7 @@ class Game:
 
     def run(self) -> None:
         # TODO: Delete these after testing
-        chr = self.__characters[0]
+        chr = self.__characters[1]
         new_position = pyray.Vector2(chr.pos_x + 128, chr.pos_y + 64)
         chr.move_to(new_position)
 
