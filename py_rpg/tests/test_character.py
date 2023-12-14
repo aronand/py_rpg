@@ -26,5 +26,11 @@ class TestCharacter(TestCase):
         self.assertFalse(self.character1.is_moving)
 
     def test_next_position(self) -> None:
-        self.character1.move_to(pyray.Vector2(32, 0))
-        self.assertTrue(self.character1.is_moving)
+        self.character1.move_to(pyray.Vector2(32, 64))
+
+        with self.subTest("Test Character.is_moving"):
+            self.assertTrue(self.character1.is_moving)
+        
+        with self.subTest("Test Character.next_x and Character.next_y"):
+            self.assertEqual(32.0, self.character1.next_x)
+            self.assertEqual(64.0, self.character1.next_y)

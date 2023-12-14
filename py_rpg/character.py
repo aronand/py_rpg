@@ -21,6 +21,14 @@ class Character:
         return self.__position.y
 
     @property
+    def next_x(self) -> float:
+        return self.__next_position.x
+
+    @property
+    def next_y(self) -> float:
+        return self.__next_position.y
+
+    @property
     def is_moving(self) -> bool:
         """
         Determines if a character is moving.
@@ -28,7 +36,7 @@ class Character:
         Based on whether the character's position is roughly equal to the next position.
         """
         # For whatever reason comparing the vectors doesn't work, will have to investigate further
-        return int(self.pos_x) != int(self.__next_position.x) or int(self.pos_y) != int(self.__next_position.y)
+        return int(self.pos_x) != int(self.next_x) or int(self.pos_y) != int(self.next_y)
 
     def move_to(self, position: pyray.Vector2) -> None:
         """
