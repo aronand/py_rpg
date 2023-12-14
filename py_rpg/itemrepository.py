@@ -1,4 +1,5 @@
 from functools import singledispatchmethod
+from typing import Iterator
 
 from item import Item
 
@@ -14,6 +15,9 @@ class ItemRepository:
 
     def __getitem__(self, idx: int) -> Item:
         return self.__items[idx]
+
+    def __iter__(self) -> Iterator[Item]:
+        return iter(self.__items)
 
     def __len__(self) -> int:
         return len(self.__items)
@@ -37,7 +41,7 @@ class ItemRepository:
         """
         Remove an item from the ItemRepository based on the type of arg.
         """
-        pass
+        raise NotImplementedError
 
     @remove_item.register
     def _(self, arg: int) -> Item:

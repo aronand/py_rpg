@@ -15,19 +15,19 @@ class Character:
 
     @property
     def pos_x(self) -> float:
-        return self.__position.x
+        return float(self.__position.x)
 
     @property
     def pos_y(self) -> float:
-        return self.__position.y
+        return float(self.__position.y)
 
     @property
     def next_x(self) -> float:
-        return self.__next_position.x
+        return float(self.__next_position.x)
 
     @property
     def next_y(self) -> float:
-        return self.__next_position.y
+        return float(self.__next_position.y)
 
     @property
     def is_moving(self) -> bool:
