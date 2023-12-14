@@ -31,7 +31,7 @@ class Game:
     @property
     def delta_time(self) -> float:
         return self.__delta_time
-    
+
     def __update_time(self) -> None:
         self.__delta_time = time.time() - self.__time
         self.__time = time.time()

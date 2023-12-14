@@ -17,7 +17,7 @@ class ItemLoader:
         """
         with open(path, "r") as item_json:
             parsed_json = json.load(item_json)
-        
+
         for item in parsed_json:
             name: str = item["name"]
             description: str = item["description"]

@@ -5,25 +5,25 @@ from item import Item
 
 class ItemRepository:
     __slots__ = ["__items"]
-    
+
     class ItemNotFoundException(Exception):
         pass
 
     def __init__(self) -> None:
         self.__items: list[Item] = []
-    
+
     def __getitem__(self, idx: int) -> Item:
         return self.__items[idx]
-    
+
     def __len__(self) -> int:
         return len(self.__items)
-    
+
     def add_item(self, item: Item) -> None:
         """
         Adds an Item object into the ItemRepository.
         """
         self.__items.append(item)
-    
+
     def create_item(self, *args) -> None:
         """
         Creates an Item object in the repository with the given args.
@@ -31,14 +31,14 @@ class ItemRepository:
         See Item for more information on the args.
         """
         self.__items.append(Item(*args))
-    
+
     @singledispatchmethod
     def remove_item(self, arg) -> Item:
         """
         Remove an item from the ItemRepository based on the type of arg.
         """
         pass
-    
+
     @remove_item.register
     def _(self, arg: int) -> Item:
         """
@@ -48,7 +48,7 @@ class ItemRepository:
         :raises IndexError: If index is out of range
         """
         return self.__items.pop(arg)
-    
+
     @remove_item.register
     def _(self, arg: str) -> Item:
         """
@@ -65,5 +65,5 @@ class ItemRepository:
             if item.name != arg:
                 continue
             return self.remove_item(idx)
-        
+
         raise ItemRepository.ItemNotFoundException()

@@ -3,6 +3,7 @@ import pyray
 
 class Character:
     __slots__ = ["__name", "__position", "__next_position"]
+
     def __init__(self, name: str, position: pyray.Vector2 = pyray.Vector2(0, 0)):
         self.__name = name
         self.__position = position
