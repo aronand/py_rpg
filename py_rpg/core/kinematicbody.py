@@ -1,4 +1,5 @@
 from .node import Node
+from .time import Time
 
 import pyray
 
@@ -43,9 +44,9 @@ class KinematicBody(Node):
         """
         self.__next_position = position
 
-    def update_position(self, delta_time: float) -> None:
+    def update_position(self) -> None:
         """
         Moves the character towards its next position.
         """
         speed = 64
-        self.__position = pyray.vector2_move_towards(self.__position, self.__next_position, speed * delta_time)
+        self.__position = pyray.vector2_move_towards(self.__position, self.__next_position, speed * Time.delta_time)

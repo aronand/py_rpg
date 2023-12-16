@@ -66,7 +66,7 @@ class Game:
         for chr in self.__scene.find_child("Characters").child_nodes:
             if not chr.is_moving:
                 continue
-            chr.update_position(Time.delta_time)
+            chr.update_position()
 
     def __render_characters(self) -> None:
         for chr in self.__scene.find_child("Characters").child_nodes:
