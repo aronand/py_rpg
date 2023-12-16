@@ -8,7 +8,7 @@ class Time:
     @classmethod
     def init(cls) -> None:
         cls.__time = time.time()
-        cls.__delta_time = cls.__time
+        cls.__delta_time = 0.0
 
     @classmethod
     def update(cls) -> None:
