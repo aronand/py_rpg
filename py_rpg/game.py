@@ -6,19 +6,31 @@ from pathlib import Path
 import raywrap
 
 from character import Character
+from core import Node
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
 
 import pyray
 
 
+def generate_test_scene() -> Node:
+    scene = Node("test_scene")
+    characters = Node("Characters")
+    characters.add_child(Character("Player"))
+    characters.add_child(Character("Mike", pyray.Vector2(384, 160)))
+    characters.add_child(Character("John", pyray.Vector2(32, 64)))
+    scene.add_child(characters)
+    return scene
+
+
 class Game:
-    __slots__ = ["__characters", "__debug_mode", "__item_repository", "__scenes", "__name", "__time", "__delta_time"]
+    __slots__ = ["__characters", "__debug_mode", "__item_repository", "__scene", "__name", "__time", "__delta_time"]
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
         self.__debug_mode = debug_mode
         pyray.init_window(800, 600, self.__name)
+        self.__scene: Node = generate_test_scene()
         self.__characters: list[Character] = [
             Character("Player"),
             Character("Mike", pyray.Vector2(384, 160)),
