@@ -36,10 +36,19 @@ class TestNode(TestCase):
         self.assertIsNone(self.node.find_child("DoesNotExist"))
 
     def test_parenting(self) -> None:
-        parentless = Node()
-        self.assertIsNone(parentless.parent)
-        self.node.add_child(parentless)
-        self.assertIs(self.node, parentless.parent)
-        parented = Node(parent=self.node)
-        self.assertIs(self.node, parented.parent)
-        self.assertIs(self.node.child_nodes[1], parented)
+        with self.subTest("Calling parent.add_child()"):
+            parentless = Node()
+            self.assertIsNone(parentless.parent)
+            self.node.add_child(parentless)
+            self.assertIs(self.node, parentless.parent)
+
+        with self.subTest("Creating a Node with the parent predefined"):
+            parented = Node(parent=self.node)
+            self.assertIs(self.node, parented.parent)
+            self.assertIs(self.node.child_nodes[1], parented)
+
+        with self.subTest("Parenting the Node after creation"):
+            parentless_too = Node()
+            parentless_too.parent = self.node
+            self.assertIs(self.node, parentless_too.parent)
+            self.assertIs(self.node.child_nodes[2], parentless_too)

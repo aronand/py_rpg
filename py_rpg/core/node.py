@@ -4,14 +4,24 @@ from typing import Self
 
 class Node:
     """A base class for game objects."""
-    __slots__ = ["name", "parent", "child_nodes"]
+    __slots__ = ["name", "__parent", "child_nodes"]
 
     def __init__(self, name: str = "Node", parent: Self | None = None) -> None:
         self.name = name
         self.parent = parent
-        if parent is not None:
-            parent.add_child(self)
         self.child_nodes: list[Self] = []  # TODO: Figure out how make Mypy work with this (i.e. how to easily make Mypy know the type of Node contained here)
+
+    @property
+    def parent(self) -> Self | None:
+        return self.__parent
+
+    @parent.setter
+    def parent(self, value: Self | None) -> None:
+        # TODO: If node already has a parent, remove it from parent's child_nodes
+        self.__parent = value
+        if value is None:
+            return
+        value.add_child(self)
 
     def add_child(self, node: Self) -> None:
         """Adds a child object to the Node.
@@ -21,7 +31,7 @@ class Node:
         if not issubclass(type(node), Node):
             raise TypeError
         self.child_nodes.append(node)
-        node.parent = self
+        node.__parent = self
 
     def remove_child(self, idx: int) -> Self:
         """Removes and returns a child object at given index.
