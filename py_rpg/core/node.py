@@ -9,7 +9,7 @@ class Node:
     def __init__(self, name: str = "Node", parent: Self | None = None) -> None:
         self.name = name
         self.parent = parent
-        self.child_nodes: list[Self] = []  # TODO: Figure out how make Mypy work with this (i.e. how to easily make Mypy know the type of Node contained here)
+        self.child_nodes: list[Self] = []
 
     @property
     def parent(self) -> Self | None:

@@ -32,14 +32,21 @@ def generate_test_scene() -> Node:
 
 
 class Game:
-    __slots__ = ["__debug_mode", "__item_repository", "__scene", "__name"]
+    __slots__ = ["__debug_mode", "__item_repository", "__scene", "__characters", "__name"]
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
         self.__debug_mode = debug_mode
         pyray.init_window(800, 600, self.__name)
         self.__scene: Node = generate_test_scene()
+        self.__characters: Node = self.__get_characters()
         self.__item_repository = self.__load_items()
+
+    def __get_characters(self) -> Node:
+        characters: Node | None = self.__scene.find_child("Characters")
+        if characters is None:
+            raise RuntimeError
+        return characters
 
     def __load_items(self) -> ItemRepository:
         item_repo = ItemRepository()
@@ -56,7 +63,9 @@ class Game:
 
     def __get_player_input(self) -> None:
         # TODO: For testing purposes this is fine, but long-term this is far from optimal
-        player = self.__scene.find_child("Characters").child_nodes[0]
+        player = self.__characters.child_nodes[0]
+        if not isinstance(player, Character):
+            return
         if not player.is_moving:
             if pyray.is_key_down(pyray.KEY_W):
                 player.move_to(pyray.Vector2(player.pos_x, player.pos_y - 32))
@@ -70,13 +79,17 @@ class Game:
     def __update(self) -> None:
         Time.update()
         self.__get_player_input()
-        for chr in self.__scene.find_child("Characters").child_nodes:
+        for chr in self.__characters.child_nodes:
+            if not isinstance(chr, Character):
+                continue
             if not chr.is_moving:
                 continue
             chr.update_position()
 
     def __render_characters(self) -> None:
-        for chr in self.__scene.find_child("Characters").child_nodes:
+        for chr in self.__characters.child_nodes:
+            if not isinstance(chr, Character):
+                continue
             font_size = 18
             pos_x = int(chr.pos_x)
             pos_y = int(chr.pos_y)
@@ -108,9 +121,10 @@ class Game:
 
     def run(self) -> None:
         # TODO: Delete these after testing
-        chr = self.__scene.find_child("Characters").child_nodes[1]
-        new_position = pyray.Vector2(chr.pos_x + 128, chr.pos_y + 64)
-        chr.move_to(new_position)
+        chr = self.__characters.child_nodes[1]
+        if isinstance(chr, Character):
+            new_position = pyray.Vector2(chr.pos_x + 128, chr.pos_y + 64)
+            chr.move_to(new_position)
 
         while not pyray.window_should_close():
             self.__update()
