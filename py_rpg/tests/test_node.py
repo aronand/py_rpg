@@ -26,6 +26,8 @@ class TestNode(TestCase):
         removed = self.node.remove_child(0)
         self.assertTrue(issubclass(type(removed), Node))
         self.assertEqual(0, len(self.node.child_nodes))
+        with self.assertRaises(IndexError):
+            self.node.remove_child(0)
 
     def test_finding_child_nodes(self) -> None:
         child_name = "TestChild"
