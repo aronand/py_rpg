@@ -9,7 +9,7 @@ class Node:
     """A base class for game objects. Heavily inspired by Godot."""
     name: str = field(default="Node")
     parent: Self | None = field(default=None)
-    child_nodes: list[Self] = field(init=False, factory=list)
+    child_nodes: list[Self] = field(init=False, factory=list)  # TODO: Figure out how make Mypy work with this (i.e. how to easily make Mypy know the type of Node contained here)
 
     def add_child(self, node: Self) -> None:
         """Adds a child object to the Node.
