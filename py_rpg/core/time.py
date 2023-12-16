@@ -1,21 +1,24 @@
 import time
 
 
-class Time:
-    __time: float
-    __delta_time: float
+class __Time:
+    __slots__ = ["__time", "__delta_time"]    
 
-    @classmethod
-    def init(cls) -> None:
-        cls.__time = time.time()
-        cls.__delta_time = 0.0
+    def __init__(self) -> None:
+        self.__time = time.time()
+        self.__delta_time = 0.0
 
-    @classmethod
-    def update(cls) -> None:
-        cls.__delta_time = time.time() - cls.__time
-        cls.__time = time.time()
+    def update(self) -> None:
+        self.__delta_time = time.time() - self.__time
+        self.__time = time.time()
 
-    @classmethod
     @property
-    def delta_time(cls) -> float:
-        return cls.__delta_time
+    def time(self) -> float:
+        return self.__time
+
+    @property
+    def delta_time(self) -> float:
+        return self.__delta_time
+
+
+Time = __Time()
