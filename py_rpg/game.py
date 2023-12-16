@@ -13,11 +13,21 @@ import pyray
 
 
 def generate_test_scene() -> Node:
+    player_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_player.png")))
+    npc_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_npc.png")))
+
+    player = Character("Player")
+    player.texture = player_texture
+    mike = Character("Mike", pyray.Vector2(384, 160))
+    mike.texture = npc_texture
+    john = Character("John", pyray.Vector2(32, 64))
+    john.texture = npc_texture
+
     scene = Node("test_scene")
     characters = Node("Characters")
-    characters.add_child(Character("Player"))
-    characters.add_child(Character("Mike", pyray.Vector2(384, 160)))
-    characters.add_child(Character("John", pyray.Vector2(32, 64)))
+    characters.add_child(player)
+    characters.add_child(mike)
+    characters.add_child(john)
     scene.add_child(characters)
     return scene
 
@@ -72,13 +82,16 @@ class Game:
             font_size = 18
             pos_x = int(chr.pos_x)
             pos_y = int(chr.pos_y)
-            next_x = int(chr.next_x)
-            next_y = int(chr.next_y)
-            pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
+            if chr.texture is None:
+                pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.MAGENTA)
+            else:
+                pyray.draw_texture(chr.texture, pos_x, pos_y, pyray.Color(255, 255, 255, 255))
             pyray.draw_text(chr.character_name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
             # Debug information
             if not self.debug_mode:
                 continue
+            next_x = int(chr.next_x)
+            next_y = int(chr.next_y)
             pyray.draw_text(f"X: {pos_x}/{next_x}", pos_x, pos_y + font_size * 2, font_size, pyray.BLACK)
             pyray.draw_text(f"Y: {pos_y}/{next_y}", pos_x, pos_y + font_size * 3, font_size, pyray.BLACK)
 
