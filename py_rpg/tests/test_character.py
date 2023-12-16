@@ -11,7 +11,7 @@ class TestCharacter(TestCase):
         self.character2 = Character("Bob", pyray.Vector2(320, 160))
 
     def test_name(self) -> None:
-        self.assertEqual("Test", self.character1.name)
+        self.assertEqual("Test", self.character1.character_name)
 
     def test_position(self) -> None:
         with self.subTest("Test default position"):

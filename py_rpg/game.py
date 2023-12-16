@@ -79,7 +79,7 @@ class Game:
             next_x = int(chr.next_x)
             next_y = int(chr.next_y)
             pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
-            pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
+            pyray.draw_text(chr.character_name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
             # Debug information
             if not self.debug_mode:
                 continue
