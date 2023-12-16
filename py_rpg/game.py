@@ -84,7 +84,7 @@ class Game:
 
     def __render_debug_information(self) -> None:
         pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
-        pyray.draw_text(f"delta_time: {self.__delta_time:.4f}", 100, 145, 24, pyray.BLACK)
+        pyray.draw_text(f"delta_time: {Time.delta_time:.4f}", 100, 145, 24, pyray.BLACK)
         pyray.draw_text(self.__item_repository[0].name, 100, 190, 24, pyray.BLACK)
         pyray.draw_text(self.__item_repository[1].name, 100, 235, 24, pyray.BLACK)
 
