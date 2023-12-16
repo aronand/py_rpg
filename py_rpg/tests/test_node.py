@@ -34,3 +34,12 @@ class TestNode(TestCase):
         self.node.add_child(Node(child_name))
         self.assertEqual(child_name, self.node.find_child(child_name).name)
         self.assertIsNone(self.node.find_child("DoesNotExist"))
+
+    def test_parenting(self) -> None:
+        parentless = Node()
+        self.assertIsNone(parentless.parent)
+        self.node.add_child(parentless)
+        self.assertIs(self.node, parentless.parent)
+        parented = Node(parent=self.node)
+        self.assertIs(self.node, parented.parent)
+        self.assertIs(self.node.child_nodes[1], parented)

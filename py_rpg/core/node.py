@@ -1,15 +1,17 @@
 """A base class for game objects. Heavily inspired by Godot."""
 from typing import Self
 
-from attrs import define, field
 
-
-@define
 class Node:
-    """A base class for game objects. Heavily inspired by Godot."""
-    name: str = field(default="Node")
-    parent: Self | None = field(default=None)
-    child_nodes: list[Self] = field(init=False, factory=list)  # TODO: Figure out how make Mypy work with this (i.e. how to easily make Mypy know the type of Node contained here)
+    """A base class for game objects."""
+    __slots__ = ["name", "parent", "child_nodes"]
+
+    def __init__(self, name: str = "Node", parent: Self | None = None) -> None:
+        self.name = name
+        self.parent = parent
+        if parent is not None:
+            parent.add_child(self)
+        self.child_nodes: list[Self] = []  # TODO: Figure out how make Mypy work with this (i.e. how to easily make Mypy know the type of Node contained here)
 
     def add_child(self, node: Self) -> None:
         """Adds a child object to the Node.
@@ -19,6 +21,7 @@ class Node:
         if not issubclass(type(node), Node):
             raise TypeError
         self.child_nodes.append(node)
+        node.parent = self
 
     def remove_child(self, idx: int) -> Self:
         """Removes and returns a child object at given index.

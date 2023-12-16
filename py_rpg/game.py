@@ -24,11 +24,10 @@ def generate_test_scene() -> Node:
     john.texture = npc_texture
 
     scene = Node("test_scene")
-    characters = Node("Characters")
+    characters = Node("Characters", scene)
     characters.add_child(player)
     characters.add_child(mike)
     characters.add_child(john)
-    scene.add_child(characters)
     return scene
 
 
