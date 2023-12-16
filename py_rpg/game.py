@@ -6,27 +6,32 @@ from pathlib import Path
 import raywrap
 
 from character import Character
+from core import Node
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
-from scene import Scene
 
 import pyray
 
 
+def generate_test_scene() -> Node:
+    scene = Node("test_scene")
+    characters = Node("Characters")
+    characters.add_child(Character("Player"))
+    characters.add_child(Character("Mike", pyray.Vector2(384, 160)))
+    characters.add_child(Character("John", pyray.Vector2(32, 64)))
+    scene.add_child(characters)
+    return scene
+
+
 class Game:
-    __slots__ = ["__characters", "__debug_mode", "__item_repository", "__scenes", "__name", "__time", "__delta_time"]
+    __slots__ = ["__debug_mode", "__item_repository", "__scene", "__name", "__time", "__delta_time"]
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
         self.__debug_mode = debug_mode
         pyray.init_window(800, 600, self.__name)
-        self.__characters: list[Character] = [
-            Character("Player"),
-            Character("Mike", pyray.Vector2(384, 160)),
-            Character("John", pyray.Vector2(32, 64)),
-        ]
+        self.__scene: Node = generate_test_scene()
         self.__item_repository = self.__load_items()
-        self.__scenes: list[Scene] = [Scene("test_scene", Path(__file__).parent.joinpath("assets", "test_tileset.png"))]
         # TODO: Create a separate time module to avoid a monolithic Game class
         self.__time: float = time.time()
         self.__delta_time: float = self.__time
@@ -54,7 +59,7 @@ class Game:
 
     def __get_player_input(self) -> None:
         # TODO: For testing purposes this is fine, but long-term this is far from optimal
-        player = self.__characters[0]
+        player = self.__scene.find_child("Characters").child_nodes[0]
         if not player.is_moving:
             if pyray.is_key_down(pyray.KEY_W):
                 player.move_to(pyray.Vector2(player.pos_x, player.pos_y - 32))
@@ -68,20 +73,20 @@ class Game:
     def __update(self) -> None:
         self.__update_time()
         self.__get_player_input()
-        for chr in self.__characters:
+        for chr in self.__scene.find_child("Characters").child_nodes:
             if not chr.is_moving:
                 continue
             chr.update_position(self.delta_time)
 
     def __render_characters(self) -> None:
-        for chr in self.__characters:
+        for chr in self.__scene.find_child("Characters").child_nodes:
             font_size = 18
             pos_x = int(chr.pos_x)
             pos_y = int(chr.pos_y)
             next_x = int(chr.next_x)
             next_y = int(chr.next_y)
             pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.BEIGE)
-            pyray.draw_text(chr.name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
+            pyray.draw_text(chr.character_name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
             # Debug information
             if not self.debug_mode:
                 continue
@@ -103,7 +108,7 @@ class Game:
 
     def run(self) -> None:
         # TODO: Delete these after testing
-        chr = self.__characters[1]
+        chr = self.__scene.find_child("Characters").child_nodes[1]
         new_position = pyray.Vector2(chr.pos_x + 128, chr.pos_y + 64)
         chr.move_to(new_position)
 
