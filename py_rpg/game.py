@@ -8,7 +8,6 @@ import raywrap
 from character import Character
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
-from scene import Scene
 
 import pyray
 
@@ -26,7 +25,6 @@ class Game:
             Character("John", pyray.Vector2(32, 64)),
         ]
         self.__item_repository = self.__load_items()
-        self.__scenes: list[Scene] = [Scene("test_scene", Path(__file__).parent.joinpath("assets", "test_tileset.png"))]
         # TODO: Create a separate time module to avoid a monolithic Game class
         self.__time: float = time.time()
         self.__delta_time: float = self.__time
