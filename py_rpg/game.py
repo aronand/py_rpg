@@ -40,7 +40,6 @@ class Game:
         pyray.init_window(800, 600, self.__name)
         self.__scene: Node = generate_test_scene()
         self.__item_repository = self.__load_items()
-        Time.init()
 
     def __load_items(self) -> ItemRepository:
         item_repo = ItemRepository()
