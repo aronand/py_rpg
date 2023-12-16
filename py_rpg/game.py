@@ -6,7 +6,7 @@ from pathlib import Path
 import raywrap
 
 from character import Character
-from core import Node
+from core import Node, Time
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
 
@@ -24,7 +24,7 @@ def generate_test_scene() -> Node:
 
 
 class Game:
-    __slots__ = ["__debug_mode", "__item_repository", "__scene", "__name", "__time", "__delta_time"]
+    __slots__ = ["__debug_mode", "__item_repository", "__scene", "__name"]
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
@@ -32,9 +32,7 @@ class Game:
         pyray.init_window(800, 600, self.__name)
         self.__scene: Node = generate_test_scene()
         self.__item_repository = self.__load_items()
-        # TODO: Create a separate time module to avoid a monolithic Game class
-        self.__time: float = time.time()
-        self.__delta_time: float = self.__time
+        Time.init()
 
     def __load_items(self) -> ItemRepository:
         item_repo = ItemRepository()
@@ -46,16 +44,8 @@ class Game:
         return item_repo
 
     @property
-    def delta_time(self) -> float:
-        return self.__delta_time
-
-    @property
     def debug_mode(self) -> bool:
         return self.__debug_mode
-
-    def __update_time(self) -> None:
-        self.__delta_time = time.time() - self.__time
-        self.__time = time.time()
 
     def __get_player_input(self) -> None:
         # TODO: For testing purposes this is fine, but long-term this is far from optimal
@@ -71,12 +61,12 @@ class Game:
                 player.move_to(pyray.Vector2(player.pos_x + 32, player.pos_y))
 
     def __update(self) -> None:
-        self.__update_time()
+        Time.update()
         self.__get_player_input()
         for chr in self.__scene.find_child("Characters").child_nodes:
             if not chr.is_moving:
                 continue
-            chr.update_position(self.delta_time)
+            chr.update_position(Time.delta_time)
 
     def __render_characters(self) -> None:
         for chr in self.__scene.find_child("Characters").child_nodes:
