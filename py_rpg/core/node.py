@@ -8,6 +8,7 @@ class Node:
 
     def __init__(self, name: str = "Node", parent: Self | None = None) -> None:
         self.name = name
+        self.__parent: Self | None = None
         self.parent = parent
         self.child_nodes: list[Self] = []
 
@@ -17,7 +18,8 @@ class Node:
 
     @parent.setter
     def parent(self, value: Self | None) -> None:
-        # TODO: If node already has a parent, remove it from parent's child_nodes
+        if self.__parent is not None:
+            self.__parent.child_nodes.remove(self)
         self.__parent = value
         if value is None:
             return

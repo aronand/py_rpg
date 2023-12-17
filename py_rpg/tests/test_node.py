@@ -52,3 +52,9 @@ class TestNode(TestCase):
             parentless_too.parent = self.node
             self.assertIs(self.node, parentless_too.parent)
             self.assertIs(self.node.child_nodes[2], parentless_too)
+
+        with self.subTest("Reparenting the Node removes it from old parent's child_nodes"):
+            new_parent = Node()
+            parentless_too.parent = new_parent
+            with self.assertRaises(IndexError):
+                self.node.child_nodes[2]
