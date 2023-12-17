@@ -44,7 +44,7 @@ class KinematicBody(Node):
         """
         self.__next_position = position
 
-    def update_position(self) -> None:
+    def update(self) -> None:
         """
         Moves the character towards its next position.
         """
