@@ -55,3 +55,10 @@ class Node:
                 continue
             return child
         return None
+
+    def update(self) -> None:
+        """A method that should be called during each game loop.
+        
+        Subclasses of Node should override the behaviour to meet their unique needs.
+        """
+        pass

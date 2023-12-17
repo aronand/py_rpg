@@ -76,15 +76,15 @@ class Game:
             if pyray.is_key_down(pyray.KEY_D):
                 player.move_to(pyray.Vector2(player.pos_x + 32, player.pos_y))
 
+    def __update_node_recursive(self, node: Node) -> None:
+        for child in node.child_nodes:
+            self.__update_node_recursive(child)
+        node.update()
+
     def __update(self) -> None:
         Time.update()
         self.__get_player_input()
-        for chr in self.__characters.child_nodes:
-            if not isinstance(chr, Character):
-                continue
-            if not chr.is_moving:
-                continue
-            chr.update_position()
+        self.__update_node_recursive(self.__scene)
 
     def __render_characters(self) -> None:
         for chr in self.__characters.child_nodes:
@@ -115,6 +115,7 @@ class Game:
     def __render(self) -> None:
         with raywrap.drawing():
             pyray.clear_background(pyray.WHITE)
+            # TODO: Recursively walk through all drawable nodes in a scene and call their render method
             self.__render_characters()
             if self.debug_mode:
                 self.__render_debug_information()

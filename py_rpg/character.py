@@ -14,3 +14,8 @@ class Character(KinematicBody):
     @property
     def character_name(self) -> str:  # can't use name, as this clashes with Node.name
         return self.__name
+
+    def update(self) -> None:
+        # We need to call the KinematicBody's update as we are inheriting it
+        # TODO: Maybe split the actual movement logic and move it here?
+        super().update()
