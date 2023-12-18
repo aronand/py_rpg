@@ -5,7 +5,7 @@ from pathlib import Path
 import raywrap
 
 from character import Character
-from core import Node, RenderableNode, Texture, Time
+from core import Label, Node, RenderableNode, Texture, Time
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
 
@@ -18,10 +18,13 @@ def generate_test_scene() -> Node:
 
     player = Character("Player")
     player.add_child(Texture(player_texture))
+    player.add_child(Label("Player"))
     mike = Character("Mike", pyray.Vector2(384, 160))
     mike.add_child(Texture(npc_texture))
+    mike.add_child(Label("Mike"))
     john = Character("John", pyray.Vector2(32, 64))
     john.add_child(Texture(npc_texture))
+    john.add_child(Label("John"))
 
     scene = Node("test_scene")
     characters = Node("Characters", scene)
