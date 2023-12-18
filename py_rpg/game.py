@@ -86,6 +86,17 @@ class Game:
                 player.move_to(pyray.Vector2(player.pos_x - 32, player.pos_y))
             if pyray.is_key_down(pyray.KEY_D):
                 player.move_to(pyray.Vector2(player.pos_x + 32, player.pos_y))
+        # Check who's under the cursor when pressing the right mouse button
+        if pyray.is_mouse_button_pressed(1):
+            mouse_position: pyray.Vector2 = pyray.get_mouse_position()
+            for character in self.__characters.child_nodes:
+                if not type(character) is Character:
+                    continue
+                rec = pyray.Rectangle(character.pos_x, character.pos_y, 32, 32)
+                collision = pyray.check_collision_point_rec(mouse_position, rec)
+                if collision:
+                    logging.info(f"Clicked on {character.character_name}")
+                    break
 
     def __update_node_recursive(self, node: Node) -> None:
         for child in node.child_nodes:
