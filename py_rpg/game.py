@@ -110,6 +110,7 @@ class Game:
             pyray.clear_background(pyray.WHITE)
             for renderable in self.__renderables:
                 renderable.render()
+            self.__renderables.clear()
             if self.debug_mode:
                 self.__render_debug_information()
 
