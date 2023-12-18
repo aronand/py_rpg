@@ -8,6 +8,7 @@ class drawing:
     """Context manager for Raylib drawing."""
     def __enter__(self) -> None:
         pyray.begin_drawing()
+        pyray.clear_background(pyray.WHITE)
 
     def __exit__(self, 
                  type: Optional[Type[BaseException]],

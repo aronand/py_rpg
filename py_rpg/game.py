@@ -107,7 +107,6 @@ class Game:
 
     def __render(self) -> None:
         with raywrap.drawing():
-            pyray.clear_background(pyray.WHITE)
             for renderable in self.__renderables:
                 renderable.render()
             self.__renderables.clear()
