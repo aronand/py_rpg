@@ -29,6 +29,13 @@ def generate_test_scene() -> Node:
     characters.add_child(player)
     characters.add_child(mike)
     characters.add_child(john)
+
+    # As this Texture is parented to a Node, which has no position, its position should be only affected by itself
+    texture_test_parent = Node(parent=scene)
+    texture_test = Texture(npc_texture)
+    texture_test.position = pyray.Vector2(700, 500)
+    texture_test_parent.add_child(texture_test)
+
     return scene
 
 
