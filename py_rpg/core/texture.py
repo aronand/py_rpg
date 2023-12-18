@@ -11,7 +11,11 @@ class Texture(RenderableNode):
         super().__init__()
 
     def render(self) -> None:
-        # TODO: Figure out how to handle this better, as right now we are very much assuming that a parent has pos_x and pos_y methods
-        pos_x = int(self.parent.pos_x + self.position.x)
-        pos_y = int(self.parent.pos_y + self.position.y)
+        if self.parent is not None and hasattr(self.parent, "position"):
+            position = pyray.vector2_add(self.parent.position, self.position)
+            pos_x = int(position.x)
+            pos_y = int(position.y)
+        else:
+            pos_x = int(self.position.x)
+            pos_y = int(self.position.y)
         pyray.draw_texture(self.__texture, pos_x, pos_y, pyray.Color(255, 255, 255, 255))

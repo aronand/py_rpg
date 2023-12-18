@@ -5,12 +5,16 @@ import pyray
 
 
 class KinematicBody(Node):
-    __slots__ = ["__position", "__next_position"]
+    __slots__ = "__position", "__next_position"
 
-    def __init__(self, position: pyray.Vector2 = pyray.Vector2(0, 0)):
+    def __init__(self, position: pyray.Vector2 = pyray.Vector2(0, 0)) -> None:
         super().__init__(name="KinematicBody")
         self.__position = position
         self.__next_position = position
+
+    @property
+    def position(self) -> pyray.Vector2:
+        return self.__position
 
     @property
     def pos_x(self) -> float:
