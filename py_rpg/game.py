@@ -15,25 +15,28 @@ import pyray
 TILE_SIZE: int = 32
 
 
+def create_character(name: str, texture: pyray.Texture2D, position: pyray.Vector2 = pyray.Vector2(0, 0)) -> Character:
+    character = Character(name, position)
+    character.add_child(Texture(texture))
+    character.add_child(Label(name))
+    return character
+
+
 def generate_test_scene() -> Node:
     player_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_player.png")))
     npc_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_npc.png")))
 
-    player = Character("Player")
-    player.add_child(Texture(player_texture))
-    player.add_child(Label("Player"))
-    mike = Character("Mike", pyray.Vector2(384, 160))
-    mike.add_child(Texture(npc_texture))
-    mike.add_child(Label("Mike"))
-    john = Character("John", pyray.Vector2(32, 64))
-    john.add_child(Texture(npc_texture))
-    john.add_child(Label("John"))
+    character_list = [
+        create_character("Player", player_texture),
+        create_character("Mike", npc_texture, pyray.Vector2(384, 160)),
+        create_character("John", npc_texture, pyray.Vector2(32, 64)),
+        create_character("Peter", npc_texture, pyray.Vector2(32, 320))
+    ]
 
     scene = Node("test_scene")
     characters = Node("Characters", scene)
-    characters.add_child(player)
-    characters.add_child(mike)
-    characters.add_child(john)
+    for character in character_list:
+        characters.add_child(character)
 
     # As this Texture is parented to a Node, which has no position, its position should be only affected by itself
     texture_test_parent = Node(parent=scene)
