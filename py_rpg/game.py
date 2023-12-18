@@ -12,6 +12,9 @@ from itemrepository import ItemRepository
 import pyray
 
 
+TILE_SIZE: int = 32
+
+
 def generate_test_scene() -> Node:
     player_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_player.png")))
     npc_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_npc.png")))
@@ -79,20 +82,20 @@ class Game:
             return
         if not player.is_moving:
             if pyray.is_key_down(pyray.KEY_W):
-                player.move_to(pyray.Vector2(player.pos_x, player.pos_y - 32))
+                player.move_to(pyray.Vector2(player.pos_x, player.pos_y - TILE_SIZE))
             if pyray.is_key_down(pyray.KEY_S):
-                player.move_to(pyray.Vector2(player.pos_x, player.pos_y + 32))
+                player.move_to(pyray.Vector2(player.pos_x, player.pos_y + TILE_SIZE))
             if pyray.is_key_down(pyray.KEY_A):
-                player.move_to(pyray.Vector2(player.pos_x - 32, player.pos_y))
+                player.move_to(pyray.Vector2(player.pos_x - TILE_SIZE, player.pos_y))
             if pyray.is_key_down(pyray.KEY_D):
-                player.move_to(pyray.Vector2(player.pos_x + 32, player.pos_y))
+                player.move_to(pyray.Vector2(player.pos_x + TILE_SIZE, player.pos_y))
         # Check who's under the cursor when pressing the right mouse button
         if pyray.is_mouse_button_pressed(1):
             mouse_position: pyray.Vector2 = pyray.get_mouse_position()
             for character in self.__characters.child_nodes:
                 if not type(character) is Character:
                     continue
-                rec = pyray.Rectangle(character.pos_x, character.pos_y, 32, 32)
+                rec = pyray.Rectangle(character.pos_x, character.pos_y, TILE_SIZE, TILE_SIZE)
                 collision = pyray.check_collision_point_rec(mouse_position, rec)
                 if collision:
                     logging.info(f"Clicked on {character.character_name}")
