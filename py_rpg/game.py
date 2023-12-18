@@ -17,7 +17,6 @@ def generate_test_scene() -> Node:
     npc_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_npc.png")))
 
     player = Character("Player")
-    # TODO: Fix the typing errors Mypy keeps throwing on these
     player.add_child(Texture(player_texture))
     mike = Character("Mike", pyray.Vector2(384, 160))
     mike.add_child(Texture(npc_texture))

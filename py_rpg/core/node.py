@@ -1,23 +1,23 @@
 """A base class for game objects. Heavily inspired by Godot."""
-from typing import Self
-
+# Need to use Optional instead of "Node" | None due to:
+# TypeError: unsupported operand type(s) for |: 'str' and 'NoneType'
+from typing import Optional
 
 class Node:
-    """A base class for game objects."""
-    __slots__ = ["name", "__parent", "child_nodes"]
+    __slots__ = "name", "__parent", "child_nodes"
 
-    def __init__(self, name: str = "Node", parent: Self | None = None) -> None:
+    def __init__(self, name: str = "Node", parent: Optional["Node"] = None) -> None:
         self.name = name
-        self.__parent: Self | None = None
+        self.__parent: "Node" | None = None
         self.parent = parent
-        self.child_nodes: list[Self] = []
+        self.child_nodes: list["Node"] = []
 
     @property
-    def parent(self) -> Self | None:
+    def parent(self) -> Optional["Node"]:
         return self.__parent
 
     @parent.setter
-    def parent(self, value: Self | None) -> None:
+    def parent(self, value: Optional["Node"]) -> None:
         if self.__parent is not None:
             self.__parent.child_nodes.remove(self)
         self.__parent = value
@@ -25,7 +25,7 @@ class Node:
             return
         value.add_child(self)
 
-    def add_child(self, node: Self) -> None:
+    def add_child(self, node: "Node") -> None:
         """Adds a child object to the Node.
         
         :raises TypeError: Argument is not a subclass of Node
@@ -35,7 +35,7 @@ class Node:
         self.child_nodes.append(node)
         node.__parent = self
 
-    def remove_child(self, idx: int) -> Self:
+    def remove_child(self, idx: int) -> "Node":
         """Removes and returns a child object at given index.
         
         :returns: Node
@@ -43,7 +43,7 @@ class Node:
         """
         return self.child_nodes.pop(idx)
 
-    def find_child(self, name: str) -> Self | None:
+    def find_child(self, name: str) -> Optional["Node"]:
         """Finds and returns a child object with a given name.
         
         Only returns the first object with a matching name, or None if no matches found.
