@@ -5,7 +5,7 @@ from pathlib import Path
 import raywrap
 
 from character import Character
-from core import Node, Time
+from core import Node, RenderableNode, Time
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
 
@@ -32,7 +32,7 @@ def generate_test_scene() -> Node:
 
 
 class Game:
-    __slots__ = ["__debug_mode", "__item_repository", "__scene", "__characters", "__name"]
+    __slots__ = "__debug_mode", "__item_repository", "__scene", "__characters", "__name", "__renderables"
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
@@ -40,6 +40,7 @@ class Game:
         pyray.init_window(800, 600, self.__name)
         self.__scene: Node = generate_test_scene()
         self.__characters: Node = self.__get_characters()
+        self.__renderables: list[RenderableNode] = []
         self.__item_repository = self.__load_items()
 
     def __get_characters(self) -> Node:
@@ -79,32 +80,14 @@ class Game:
     def __update_node_recursive(self, node: Node) -> None:
         for child in node.child_nodes:
             self.__update_node_recursive(child)
+        if isinstance(node, RenderableNode):
+            self.__renderables.append(node)
         node.update()
 
     def __update(self) -> None:
         Time.update()
         self.__get_player_input()
         self.__update_node_recursive(self.__scene)
-
-    def __render_characters(self) -> None:
-        for chr in self.__characters.child_nodes:
-            if not isinstance(chr, Character):
-                continue
-            font_size = 18
-            pos_x = int(chr.pos_x)
-            pos_y = int(chr.pos_y)
-            if chr.texture is None:
-                pyray.draw_rectangle(pos_x, pos_y, 32, 32, pyray.MAGENTA)
-            else:
-                pyray.draw_texture(chr.texture, pos_x, pos_y, pyray.Color(255, 255, 255, 255))
-            pyray.draw_text(chr.character_name, pos_x, pos_y - font_size, font_size, pyray.BLACK)
-            # Debug information
-            if not self.debug_mode:
-                continue
-            next_x = int(chr.next_x)
-            next_y = int(chr.next_y)
-            pyray.draw_text(f"X: {pos_x}/{next_x}", pos_x, pos_y + font_size * 2, font_size, pyray.BLACK)
-            pyray.draw_text(f"Y: {pos_y}/{next_y}", pos_x, pos_y + font_size * 3, font_size, pyray.BLACK)
 
     def __render_debug_information(self) -> None:
         pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
@@ -115,8 +98,8 @@ class Game:
     def __render(self) -> None:
         with raywrap.drawing():
             pyray.clear_background(pyray.WHITE)
-            # TODO: Recursively walk through all drawable nodes in a scene and call their render method
-            self.__render_characters()
+            for renderable in self.__renderables:
+                renderable.render()
             if self.debug_mode:
                 self.__render_debug_information()
 
