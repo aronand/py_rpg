@@ -5,7 +5,7 @@ from pathlib import Path
 import raywrap
 
 from character import Character
-from core import Node, RenderableNode, Time
+from core import Node, RenderableNode, Texture, Time
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
 
@@ -17,11 +17,12 @@ def generate_test_scene() -> Node:
     npc_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_npc.png")))
 
     player = Character("Player")
-    player.texture = player_texture
+    # TODO: Fix the typing errors Mypy keeps throwing on these
+    player.add_child(Texture(player_texture))
     mike = Character("Mike", pyray.Vector2(384, 160))
-    mike.texture = npc_texture
+    mike.add_child(Texture(npc_texture))
     john = Character("John", pyray.Vector2(32, 64))
-    john.texture = npc_texture
+    john.add_child(Texture(npc_texture))
 
     scene = Node("test_scene")
     characters = Node("Characters", scene)

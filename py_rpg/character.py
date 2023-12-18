@@ -4,14 +4,13 @@ import pyray
 
 
 class Character(KinematicBody):
-    __slots__ = ["__name", "texture", "__level", "__max_stamina", "__cur_stamina"]
+    __slots__ = "__name", "__level", "__max_stamina", "__cur_stamina"
 
-    def __init__(self, name: str, position: pyray.Vector2 = pyray.Vector2(0, 0)):
+    def __init__(self, name: str, position: pyray.Vector2 = pyray.Vector2(0, 0)) -> None:
         self.__name = name
         self.__level: int = 1
         self.__max_stamina: int = 100
         self.__cur_stamina: int = self.__max_stamina
-        self.texture: pyray.Texture2D | None = None
         super().__init__(position)
 
     @property

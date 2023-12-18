@@ -4,10 +4,11 @@ import pyray
 
 
 class RenderableNode(Node):
-    __slots__ = ("__position")
+    __slots__ = ("position")
 
     def __init__(self) -> None:
-        self.__position = pyray.Vector2(0, 0)
+        self.position = pyray.Vector2(0, 0)
+        super().__init__()
 
     def render(self) -> None:
         pass
