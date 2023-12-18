@@ -12,6 +12,8 @@ class Label(RenderableNode):
         self.__text = text
 
     def render(self) -> None:
+        if not self.visible:
+            return
         if self.parent is not None and hasattr(self.parent, "position"):
             position = pyray.vector2_add(self.parent.position, self.position)
             pos_x = int(position.x)
