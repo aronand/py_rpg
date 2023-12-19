@@ -87,26 +87,24 @@ class Game:
         player = self.__characters.child_nodes[0]
         if not isinstance(player, Character):
             return
+        mouse_position = pyray.get_mouse_position()
+        mouse_world_position = pyray.get_screen_to_world_2d(mouse_position, self.__camera)
         # FIXME: This is the wrong place for this
         self.__camera.target = pyray.Vector2(player.position.x + TILE_SIZE, player.position.y + TILE_SIZE)
         if not player.is_moving:
             direction = pyray.vector2_zero()
             direction.x += pyray.is_key_down(pyray.KEY_D) - pyray.is_key_down(pyray.KEY_A)
             direction.y += pyray.is_key_down(pyray.KEY_S) - pyray.is_key_down(pyray.KEY_W)
-            # Multiply axis' by TILE_SIZE for tile based movement
+            # Multiply axes by TILE_SIZE for tile based movement
             next_pos = pyray.Vector2(player.pos_x + direction.x, player.pos_y + direction.y)
             player.move_to(next_pos)
         if pyray.is_mouse_button_pressed(0):
-            mouse_position = pyray.get_mouse_position()
-            mouse_world_position = pyray.get_screen_to_world_2d(mouse_position, self.__camera)
             player.move_to(mouse_world_position)
         # Check who's under the cursor when pressing the right mouse button
         if pyray.is_mouse_button_pressed(1):
-            mouse_position: pyray.Vector2 = pyray.get_mouse_position()
             for character in self.__characters.child_nodes:
                 if not type(character) is Character:
                     continue
-                mouse_world_position = pyray.get_screen_to_world_2d(mouse_position, self.__camera)
                 rec = pyray.Rectangle(character.pos_x, character.pos_y, TILE_SIZE, TILE_SIZE)
                 collision = pyray.check_collision_point_rec(mouse_world_position, rec)
                 if collision:
