@@ -48,12 +48,16 @@ def generate_test_scene() -> Node:
 
 
 class Game:
-    __slots__ = "__debug_mode", "__item_repository", "__scene", "__characters", "__name", "__renderables"
+    __slots__ = ("__debug_mode", "__item_repository", "__scene", "__characters", "__name", "__renderables",
+                 "__camera", "__window_width", "__window_height")
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
         self.__debug_mode = debug_mode
-        pyray.init_window(800, 600, self.__name)
+        self.__window_width: int = 800
+        self.__window_height: int = 600
+        pyray.init_window(self.__window_width, self.__window_height, self.__name)
+        self.__camera = pyray.Camera2D()
         self.__scene: Node = generate_test_scene()
         self.__characters: Node = self.__get_characters()
         self.__renderables: list[RenderableNode] = []
@@ -82,6 +86,11 @@ class Game:
         player = self.__characters.child_nodes[0]
         if not isinstance(player, Character):
             return
+        # FIXME: This is the wrong place for this
+        self.__camera.target = pyray.Vector2(player.position.x + TILE_SIZE, player.position.y + TILE_SIZE)
+        self.__camera.offset = pyray.Vector2(self.__window_width / 2, self.__window_height / 2)
+        self.__camera.rotation = 0
+        self.__camera.zoom = 1
         if not player.is_moving:
             direction = pyray.vector2_zero()
             direction.x += pyray.is_key_down(pyray.KEY_D) - pyray.is_key_down(pyray.KEY_A)
@@ -120,7 +129,7 @@ class Game:
         pyray.draw_text(self.__item_repository[1].name, 100, 235, 24, pyray.BLACK)
 
     def __render(self) -> None:
-        with raywrap.drawing():
+        with raywrap.drawing(self.__camera):
             for renderable in self.__renderables:
                 renderable.render()
             self.__renderables.clear()
