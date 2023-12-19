@@ -50,5 +50,5 @@ class KinematicBody(Node2D):
         """
         Moves the character towards its next position.
         """
-        speed = 64
-        self.position = pyray.vector2_move_towards(self.position, self.__next_position, speed * Time.delta_time)
+        speed_per_second = 64
+        self.position = pyray.vector2_move_towards(self.position, self.__next_position, speed_per_second * Time.delta_time)
