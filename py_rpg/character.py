@@ -1,21 +1,25 @@
+from core import Node
 from core import KinematicBody
 
 import pyray
 
 
 class Character(KinematicBody):
-    __slots__ = "__name", "__level", "__max_stamina", "__cur_stamina"
+    __slots__ = "__character_name", "__level", "__max_stamina", "__cur_stamina"
 
-    def __init__(self, name: str, position: pyray.Vector2 = pyray.Vector2(0, 0)) -> None:
-        self.__name = name
+    def __init__(self, node_name: str = "Character",
+                 parent: Node | None = None,
+                 character_name: str = "",
+                 position: pyray.Vector2 = pyray.Vector2(0, 0)) -> None:
+        super().__init__(node_name=node_name, parent=parent, position=position)
+        self.__character_name = character_name
         self.__level: int = 1
         self.__max_stamina: int = 100
         self.__cur_stamina: int = self.__max_stamina
-        super().__init__(position)
 
     @property
     def character_name(self) -> str:  # can't use name, as this clashes with Node.name
-        return self.__name
+        return self.__character_name
 
     @property
     def level(self) -> int:

@@ -1,3 +1,6 @@
+from typing import Optional
+
+from .node import Node
 from .renderablenode import RenderableNode
 
 import pyray
@@ -6,9 +9,12 @@ import pyray
 class Texture(RenderableNode):
     __slots__ = "__texture"
 
-    def __init__(self, texture: pyray.Texture2D) -> None:
+    def __init__(self, node_name: str = "Texture",
+                 parent: Node | None = None,
+                 texture: Optional[pyray.Texture2D] = None,
+                 position: pyray.Vector2 = pyray.vector2_zero()) -> None:
+        super().__init__(node_name=node_name, parent=parent, position=position)
         self.__texture = texture
-        super().__init__()
 
     def render(self) -> None:
         if not self.visible:

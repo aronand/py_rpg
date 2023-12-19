@@ -6,8 +6,9 @@ from typing import Optional
 class Node:
     __slots__ = "name", "__parent", "child_nodes"
 
-    def __init__(self, name: str = "Node", parent: Optional["Node"] = None) -> None:
-        self.name = name
+    def __init__(self, node_name: str = "Node", 
+                 parent: Optional["Node"] = None) -> None:
+        self.name = node_name
         self.__parent: "Node" | None = None
         self.parent = parent
         self.child_nodes: list["Node"] = []

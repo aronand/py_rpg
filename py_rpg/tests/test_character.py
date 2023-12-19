@@ -7,8 +7,8 @@ from character import Character
 
 class TestCharacter(TestCase):
     def setUp(self) -> None:
-        self.character1 = Character("Test")
-        self.character2 = Character("Bob", pyray.Vector2(320, 160))
+        self.character1 = Character(character_name="Test")
+        self.character2 = Character(character_name="Bob", position=pyray.Vector2(320, 160))
 
     def test_name(self) -> None:
         self.assertEqual("Test", self.character1.character_name)
