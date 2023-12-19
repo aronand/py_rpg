@@ -125,10 +125,16 @@ class Game:
         self.__update_node_recursive(self.__scene, update_renderables)
 
     def __render_debug_information(self) -> None:
-        pyray.draw_text(self.__name, 10, 10, 24, pyray.BLACK)
-        pyray.draw_text(f"delta_time: {Time.delta_time:.4f}", 10, 55, 24, pyray.BLACK)
-        pyray.draw_text(self.__item_repository[0].name, 10, 100, 24, pyray.BLACK)
-        pyray.draw_text(self.__item_repository[1].name, 10, 145, 24, pyray.BLACK)
+        text_items: list[str] = [
+            self.__name,
+            f"FPS: {pyray.get_fps()}",
+            f"delta_time: {Time.delta_time:.4f}",
+            f"pyray.get_frame_time(): {pyray.get_frame_time():.4f}"
+        ]
+
+        for idx, item in enumerate(text_items):
+            pos_y = 10 + (30 * idx )
+            pyray.draw_text(item, 10, pos_y, 24, pyray.BLACK)
 
     def __render(self) -> None:
         with raywrap.drawing():
