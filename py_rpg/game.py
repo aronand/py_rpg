@@ -96,6 +96,10 @@ class Game:
             # Multiply axis' by TILE_SIZE for tile based movement
             next_pos = pyray.Vector2(player.pos_x + direction.x, player.pos_y + direction.y)
             player.move_to(next_pos)
+        if pyray.is_mouse_button_pressed(0):
+            mouse_position = pyray.get_mouse_position()
+            mouse_world_position = pyray.get_screen_to_world_2d(mouse_position, self.__camera)
+            player.move_to(mouse_world_position)
         # Check who's under the cursor when pressing the right mouse button
         if pyray.is_mouse_button_pressed(1):
             mouse_position: pyray.Vector2 = pyray.get_mouse_position()
