@@ -1,3 +1,4 @@
+from .node import Node
 from .renderablenode import RenderableNode
 
 import pyray
@@ -6,8 +7,12 @@ import pyray
 class Label(RenderableNode):
     __slots__ = "__font_size", "__text"
 
-    def __init__(self, text: str = "", font_size: int = 18) -> None:
-        super().__init__()
+    def __init__(self, node_name: str = "Label",
+                 parent: Node | None = None,
+                 position: pyray.Vector2 = pyray.vector2_zero(),
+                 text: str = "",
+                 font_size: int = 18) -> None:
+        super().__init__(node_name=node_name, parent=parent, position=position)
         self.__font_size = font_size
         self.__text = text
 

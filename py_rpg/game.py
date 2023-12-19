@@ -16,9 +16,9 @@ TILE_SIZE: int = 32
 
 
 def create_character(name: str, texture: pyray.Texture2D, position: pyray.Vector2 = pyray.Vector2(0, 0)) -> Character:
-    character = Character(name, position)
-    character.add_child(Texture(texture))
-    character.add_child(Label(name))
+    character = Character(node_name=name, character_name=name, position=position)
+    Texture(parent=character, texture=texture)
+    Label(parent=character, text=name)
     return character
 
 
@@ -39,10 +39,8 @@ def generate_test_scene() -> Node:
         characters.add_child(character)
 
     # As this Texture is parented to a Node, which has no position, its position should be only affected by itself
-    texture_test_parent = Node(parent=scene)
-    texture_test = Texture(npc_texture)
-    texture_test.position = pyray.Vector2(700, 500)
-    texture_test_parent.add_child(texture_test)
+    texture_test = Node(parent=scene)
+    Texture(parent=texture_test, texture=npc_texture, position=pyray.Vector2(700, 500))
 
     return scene
 

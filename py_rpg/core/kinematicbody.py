@@ -1,28 +1,26 @@
 from .node import Node
+from .node2d import Node2D
 from .time import Time
 
 import pyray
 
 
-class KinematicBody(Node):
-    __slots__ = "__position", "__next_position"
+class KinematicBody(Node2D):
+    __slots__ = "__next_position"
 
-    def __init__(self, position: pyray.Vector2 = pyray.Vector2(0, 0)) -> None:
-        super().__init__(name="KinematicBody")
-        self.__position = position
+    def __init__(self, node_name: str = "KinematicBody",
+                 parent: Node | None = None,
+                 position: pyray.Vector2 = pyray.Vector2(0, 0)) -> None:
+        super().__init__(node_name=node_name, parent=parent, position=position)
         self.__next_position = position
 
     @property
-    def position(self) -> pyray.Vector2:
-        return self.__position
-
-    @property
     def pos_x(self) -> float:
-        return float(self.__position.x)
+        return float(self.position.x)
 
     @property
     def pos_y(self) -> float:
-        return float(self.__position.y)
+        return float(self.position.y)
 
     @property
     def next_x(self) -> float:
@@ -52,5 +50,5 @@ class KinematicBody(Node):
         """
         Moves the character towards its next position.
         """
-        speed = 64
-        self.__position = pyray.vector2_move_towards(self.__position, self.__next_position, speed * Time.delta_time)
+        speed_per_second = 64
+        self.position = pyray.vector2_move_towards(self.position, self.__next_position, speed_per_second * Time.delta_time)
