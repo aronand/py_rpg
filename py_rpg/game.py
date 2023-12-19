@@ -79,19 +79,16 @@ class Game:
         return self.__debug_mode
 
     def __get_player_input(self) -> None:
-        # TODO: For testing purposes this is fine, but long-term this is far from optimal
         player = self.__characters.child_nodes[0]
         if not isinstance(player, Character):
             return
         if not player.is_moving:
-            if pyray.is_key_down(pyray.KEY_W):
-                player.move_to(pyray.Vector2(player.pos_x, player.pos_y - TILE_SIZE))
-            if pyray.is_key_down(pyray.KEY_S):
-                player.move_to(pyray.Vector2(player.pos_x, player.pos_y + TILE_SIZE))
-            if pyray.is_key_down(pyray.KEY_A):
-                player.move_to(pyray.Vector2(player.pos_x - TILE_SIZE, player.pos_y))
-            if pyray.is_key_down(pyray.KEY_D):
-                player.move_to(pyray.Vector2(player.pos_x + TILE_SIZE, player.pos_y))
+            direction = pyray.vector2_zero()
+            direction.x += pyray.is_key_down(pyray.KEY_D) - pyray.is_key_down(pyray.KEY_A)
+            direction.y += pyray.is_key_down(pyray.KEY_S) - pyray.is_key_down(pyray.KEY_W)
+            # Multiply axis' by TILE_SIZE for tile based movement
+            next_pos = pyray.Vector2(player.pos_x + direction.x, player.pos_y + direction.y)
+            player.move_to(next_pos)
         # Check who's under the cursor when pressing the right mouse button
         if pyray.is_mouse_button_pressed(1):
             mouse_position: pyray.Vector2 = pyray.get_mouse_position()
