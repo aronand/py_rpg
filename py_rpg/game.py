@@ -110,17 +110,18 @@ class Game:
                     logging.info(f"Clicked on {character.character_name}")
                     break
 
-    def __update_node_recursive(self, node: Node) -> None:
+    def __update_node_recursive(self, node: Node, update_renderables: bool) -> None:
         for child in node.child_nodes:
-            self.__update_node_recursive(child)
-        if isinstance(node, RenderableNode):
+            self.__update_node_recursive(child, update_renderables)
+        if update_renderables and isinstance(node, RenderableNode):
             self.__renderables.append(node)
         node.update()
 
     def __update(self) -> None:
         Time.update()
         self.__get_player_input()
-        self.__update_node_recursive(self.__scene)
+        update_renderables: bool = len(self.__renderables) == 0
+        self.__update_node_recursive(self.__scene, update_renderables)
 
     def __render_debug_information(self) -> None:
         pyray.draw_text(self.__name, 100, 100, 24, pyray.BLACK)
@@ -132,7 +133,6 @@ class Game:
         with raywrap.drawing(self.__camera):
             for renderable in self.__renderables:
                 renderable.render()
-            self.__renderables.clear()
             if self.debug_mode:
                 self.__render_debug_information()
 
