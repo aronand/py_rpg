@@ -17,7 +17,7 @@ class Texture(RenderableNode):
         self.__texture = texture
 
     def render(self) -> None:
-        if not self.visible:
+        if not self.visible or self.__texture == None:
             return
         if self.parent is not None and hasattr(self.parent, "position"):
             position = pyray.vector2_add(self.parent.position, self.position)
