@@ -58,6 +58,9 @@ class Game:
         self.__window_height: int = 600
         pyray.init_window(self.__window_width, self.__window_height, self.__name)
         self.__camera = pyray.Camera2D()
+        self.__camera.offset = pyray.Vector2(self.__window_width / 2, self.__window_height / 2)
+        self.__camera.rotation = 0
+        self.__camera.zoom = 1
         self.__scene: Node = generate_test_scene()
         self.__characters: Node = self.__get_characters()
         self.__renderables: list[RenderableNode] = []
@@ -88,9 +91,6 @@ class Game:
             return
         # FIXME: This is the wrong place for this
         self.__camera.target = pyray.Vector2(player.position.x + TILE_SIZE, player.position.y + TILE_SIZE)
-        self.__camera.offset = pyray.Vector2(self.__window_width / 2, self.__window_height / 2)
-        self.__camera.rotation = 0
-        self.__camera.zoom = 1
         if not player.is_moving:
             direction = pyray.vector2_zero()
             direction.x += pyray.is_key_down(pyray.KEY_D) - pyray.is_key_down(pyray.KEY_A)
