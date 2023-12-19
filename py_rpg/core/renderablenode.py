@@ -5,6 +5,10 @@ import pyray
 
 
 class RenderableNode(Node2D):
+    """A base class for renderable game objects.
+    
+    Should not be instantiated, as its render() method is not implemented!
+    """
     __slots__ = "visible"
 
     def __init__(self, node_name: str = "RenderableNode",
@@ -15,4 +19,8 @@ class RenderableNode(Node2D):
         self.visible = visible
 
     def render(self) -> None:
-        pass
+        """A method that should be called during each game loop.
+        
+        Subclasses must implement this method!
+        """
+        raise NotImplementedError
