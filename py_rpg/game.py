@@ -104,8 +104,9 @@ class Game:
             for character in self.__characters.child_nodes:
                 if not type(character) is Character:
                     continue
+                mouse_world_position = pyray.get_screen_to_world_2d(mouse_position, self.__camera)
                 rec = pyray.Rectangle(character.pos_x, character.pos_y, TILE_SIZE, TILE_SIZE)
-                collision = pyray.check_collision_point_rec(mouse_position, rec)
+                collision = pyray.check_collision_point_rec(mouse_world_position, rec)
                 if collision:
                     logging.info(f"Clicked on {character.character_name}")
                     break
