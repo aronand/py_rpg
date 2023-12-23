@@ -8,6 +8,7 @@ from character import Character
 from core import Label, Node, RenderableNode, Texture, Time
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
+from window import Window
 
 import pyray
 
@@ -47,16 +48,14 @@ def generate_test_scene() -> Node:
 
 class Game:
     __slots__ = ("__debug_mode", "__item_repository", "__scene", "__characters", "__name", "__renderables",
-                 "__camera", "__window_width", "__window_height")
+                 "__camera", "__window")
 
     def __init__(self, name: str, debug_mode: bool):
         self.__name = name
         self.__debug_mode = debug_mode
-        self.__window_width: int = 800
-        self.__window_height: int = 600
-        pyray.init_window(self.__window_width, self.__window_height, self.__name)
+        self.__window = Window(800, 600, self.__name)
         self.__camera = pyray.Camera2D()
-        self.__camera.offset = pyray.Vector2(self.__window_width / 2, self.__window_height / 2)
+        self.__camera.offset = pyray.Vector2(self.__window.width / 2, self.__window.height / 2)
         self.__camera.rotation = 0
         self.__camera.zoom = 1
         self.__scene: Node = generate_test_scene()
@@ -154,4 +153,3 @@ class Game:
         while not pyray.window_should_close():
             self.__update()
             self.__render()
-        pyray.close_window()
