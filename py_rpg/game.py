@@ -89,7 +89,7 @@ class Game:
         mouse_position = pyray.get_mouse_position()
         mouse_world_position = pyray.get_screen_to_world_2d(mouse_position, self.__camera)
         # FIXME: This is the wrong place for this
-        self.__camera.target = pyray.Vector2(player.position.x + TILE_SIZE, player.position.y + TILE_SIZE)
+        self.__camera.target = pyray.Vector2(int(player.position.x) + TILE_SIZE, int(player.position.y) + TILE_SIZE)
         if not player.is_moving:
             direction = pyray.vector2_zero()
             direction.x += pyray.is_key_down(pyray.KEY_D) - pyray.is_key_down(pyray.KEY_A)
