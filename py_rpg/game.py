@@ -83,7 +83,7 @@ class Game:
         return self.__debug_mode
 
     def __get_player_input(self) -> None:
-        player = self.__characters.child_nodes[0]
+        player = self.__characters.child_nodes["Player"]
         if not isinstance(player, Character):
             return
         mouse_position = pyray.get_mouse_position()
@@ -101,7 +101,7 @@ class Game:
             player.move_to(mouse_world_position)
         # Check who's under the cursor when pressing the right mouse button
         if pyray.is_mouse_button_pressed(1):
-            for character in self.__characters.child_nodes:
+            for character in self.__characters.child_nodes.values():
                 if not type(character) is Character:
                     continue
                 rec = pyray.Rectangle(character.pos_x, character.pos_y, TILE_SIZE, TILE_SIZE)
@@ -111,7 +111,7 @@ class Game:
                     break
 
     def __update_node_recursive(self, node: Node, update_renderables: bool) -> None:
-        for child in node.child_nodes:
+        for child in node.child_nodes.values():
             self.__update_node_recursive(child, update_renderables)
         if update_renderables and isinstance(node, RenderableNode):
             self.__renderables.append(node)
@@ -145,7 +145,7 @@ class Game:
 
     def run(self) -> None:
         # TODO: Delete these after testing
-        chr = self.__characters.child_nodes[1]
+        chr = self.__characters.child_nodes["Mike"]
         if isinstance(chr, Character):
             new_position = pyray.Vector2(chr.pos_x + 128, chr.pos_y + 64)
             chr.move_to(new_position)
