@@ -117,9 +117,27 @@ class Game:
             self.__renderables.append(node)
         node.update()
 
+    def __get_collisions(self) -> None:
+        player = self.__characters.find_child("Player")
+        if not isinstance(player, Character):
+            return
+        player_rect = pyray.Rectangle(player.pos_x, player.pos_y, TILE_SIZE, TILE_SIZE)
+        for character in self.__characters.child_nodes.values():
+            if not isinstance(character, Character):
+                continue
+            if character is player:
+                continue
+
+            character_rect = pyray.Rectangle(character.pos_x, character.pos_y, TILE_SIZE, TILE_SIZE)
+            if not pyray.check_collision_recs(player_rect, character_rect):
+                continue
+            
+            player.move_to(player.position)
+
     def __update(self) -> None:
         Time.update()
         self.__get_player_input()
+        self.__get_collisions()
         update_renderables: bool = len(self.__renderables) == 0
         self.__update_node_recursive(self.__scene, update_renderables)
 
