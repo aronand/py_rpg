@@ -53,9 +53,7 @@ class Node:
 
         :returns: Node | None
         """
-        if node_name in self.child_nodes:
-            return self.child_nodes[node_name]
-        return None
+        return self.child_nodes.get(node_name, None)
 
     def update(self) -> None:
         """A method that should be called during each game loop.
