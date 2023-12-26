@@ -121,7 +121,7 @@ class Game:
         player = self.__characters.find_child("Player")
         if not isinstance(player, Character):
             return
-        player_rect = pyray.Rectangle(player.pos_x, player.pos_y, TILE_SIZE, TILE_SIZE)
+        player_rect = pyray.Rectangle(player.next_x, player.next_y, TILE_SIZE, TILE_SIZE)
         for character in self.__characters.child_nodes.values():
             if not isinstance(character, Character):
                 continue
