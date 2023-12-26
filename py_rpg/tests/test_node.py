@@ -30,6 +30,11 @@ class TestNode(TestCase):
             test_parent.add_child(test_node)
             with self.assertRaises(RuntimeError):
                 self.node.add_child(test_node)
+        
+        with self.subTest("Node with same name can't be added"):
+            self.node.add_child(Node(node_name="TestNode"))
+            with self.assertRaises(RuntimeError):
+                self.node.add_child(Node(node_name="TestNode"))
 
         with self.subTest("Parent is modified and child is added"):
             test_node2 = Node("TestNode2")

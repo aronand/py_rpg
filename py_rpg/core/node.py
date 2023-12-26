@@ -23,10 +23,13 @@ class Node:
         
         :raises TypeError: Argument is not a subclass of Node
         :raises RuntimeError: Node already has a parent
+        :raises RuntimeError: Child Node with same name already exists
         """
         if not issubclass(type(node), Node):
             raise TypeError
         if node.parent is not None:
+            raise RuntimeError
+        if node.name in self.child_nodes:
             raise RuntimeError
         node_name: str = node.name
         self.child_nodes[node_name] = node
