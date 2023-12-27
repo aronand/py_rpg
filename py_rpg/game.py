@@ -8,6 +8,7 @@ from character import Character
 from core import Label, Node, RenderableNode, Texture, Time
 from itemloader import ItemLoader
 from itemrepository import ItemRepository
+from scene import Scene
 from window import Window
 
 import pyray
@@ -23,7 +24,7 @@ def create_character(name: str, texture: pyray.Texture2D, position: pyray.Vector
     return character
 
 
-def generate_test_scene() -> Node:
+def generate_test_scene() -> Scene:
     player_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_player.png")))
     npc_texture = pyray.load_texture(str(Path(__file__).parent.joinpath("assets", "test_npc.png")))
 
@@ -34,13 +35,13 @@ def generate_test_scene() -> Node:
         create_character("Peter", npc_texture, pyray.Vector2(32, 320))
     ]
 
-    scene = Node("test_scene")
-    characters = Node("Characters", scene)
+    scene = Scene()
+    characters = Node("Characters", scene.root_node)
     for character in character_list:
         characters.add_child(character)
 
     # As this Texture is parented to a Node, which has no position, its position should be only affected by itself
-    texture_test = Node(parent=scene)
+    texture_test = Node(parent=scene.root_node)
     Texture(parent=texture_test, texture=npc_texture, position=pyray.Vector2(700, 500))
 
     return scene
@@ -58,13 +59,13 @@ class Game:
         self.__camera.offset = pyray.Vector2(self.__window.width / 2, self.__window.height / 2)
         self.__camera.rotation = 0
         self.__camera.zoom = 1
-        self.__scene: Node = generate_test_scene()
+        self.__scene: Scene = generate_test_scene()
+        self.__scene.generate_renderables()
         self.__characters: Node = self.__get_characters()
-        self.__renderables: list[RenderableNode] = []
         self.__item_repository = self.__load_items()
 
     def __get_characters(self) -> Node:
-        characters: Node | None = self.__scene.find_child("Characters")
+        characters: Node | None = self.__scene.root_node.find_child("Characters")
         if characters is None:
             raise RuntimeError
         return characters
@@ -110,13 +111,6 @@ class Game:
                     logging.info(f"Clicked on {character.character_name}")
                     break
 
-    def __update_node_recursive(self, node: Node, update_renderables: bool) -> None:
-        for child in node.child_nodes.values():
-            self.__update_node_recursive(child, update_renderables)
-        if update_renderables and isinstance(node, RenderableNode):
-            self.__renderables.append(node)
-        node.update()
-
     def __get_collisions(self) -> None:
         player = self.__characters.find_child("Player")
         if not isinstance(player, Character):
@@ -138,8 +132,7 @@ class Game:
         Time.update()
         self.__get_player_input()
         self.__get_collisions()
-        update_renderables: bool = len(self.__renderables) == 0
-        self.__update_node_recursive(self.__scene, update_renderables)
+        self.__scene.update()
 
     def __render_debug_information(self) -> None:
         text_items: list[str] = [
@@ -156,7 +149,7 @@ class Game:
     def __render(self) -> None:
         with raywrap.drawing():
             with raywrap.mode_2d(self.__camera):
-                for renderable in self.__renderables:
+                for renderable in self.__scene.renderable_nodes:
                     renderable.render()
             if self.debug_mode:
                 self.__render_debug_information()
