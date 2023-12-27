@@ -60,6 +60,7 @@ class Game:
         self.__camera.rotation = 0
         self.__camera.zoom = 1
         self.__scene: Scene = generate_test_scene()
+        self.__scene.generate_renderables()
         self.__characters: Node = self.__get_characters()
         self.__item_repository = self.__load_items()
 
